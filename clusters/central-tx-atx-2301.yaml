@@ -1,0 +1,10 @@
+name: central-tx-atx-2301
+environment: dev
+region: central
+zone: central-tx
+district: central-tx-atx
+store: central-tx-atx-2301
+domain: central-tx-atx-2301.k8s-edge.com
+ingressType: Https
+gitopsRepo: kubernetes101/argo-load
+gitopsBranch: bartr
