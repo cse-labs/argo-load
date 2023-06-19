@@ -152,6 +152,9 @@ git config --global fetch.prune true
 git config --global core.pager more
 git config --global credential.helper store
 
+# add .kic customizations
+cp -R "$HOME/vm/setup/.kic" "$HOME/bin"
+
 # upgrade Ubuntu
 echo "$(date +'%Y-%m-%d %H:%M:%S')  upgrading" >> "$HOME/status"
 # sudo apt-get update

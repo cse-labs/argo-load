@@ -25,4 +25,9 @@ git pull
 
 kubectl apply -k "$HOME/pib/clusters/$PIB_CLUSTER/argocd"
 
+# reapply once services start
+# todo - wait for services to be ready
+sleep 30
+kubectl apply -k "$HOME/pib/clusters/$PIB_CLUSTER/argocd"
+
 echo "$(date +'%Y-%m-%d %H:%M:%S')  argo setup complete" >> "$HOME/status"
