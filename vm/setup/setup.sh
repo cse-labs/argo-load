@@ -105,7 +105,10 @@ else
 fi
 
 # setup flux
-"$dir"/flux-setup.sh
+#"$dir"/flux-setup.sh
+
+# setup argo
+"$dir/argo-setup.sh"
 
 # run pre-arc.sh
 if [ -f "$dir"/pre-arc.sh ]

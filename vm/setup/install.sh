@@ -106,6 +106,11 @@ wget "https://github.com/derailed/k9s/releases/download/${VERSION}/k9s_Linux_amd
 sudo tar -zxvf k9s_Linux_amd64.tar.gz -C /usr/local/bin
 rm -f k9s_Linux_amd64.tar.gz
 
+echo "$(date +'%Y-%m-%d %H:%M:%S')  installing ArgoCD" >> "$HOME/status"
+curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+rm argocd-linux-amd64
+
 mkdir -p "$HOME/.oh-my-zsh/completions"
 flux completion zsh > "$HOME/.oh-my-zsh/completions/_flux"
 k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
