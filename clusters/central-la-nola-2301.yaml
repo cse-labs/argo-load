@@ -1,0 +1,10 @@
+name: central-la-nola-2301
+environment: dev
+region: central
+zone: central-la
+district: central-la-nola
+store: central-la-nola-2301
+domain: 20.125.124.139
+ingressType: Http
+gitopsRepo: kubernetes101/argo-load
+gitopsBranch: bartr
