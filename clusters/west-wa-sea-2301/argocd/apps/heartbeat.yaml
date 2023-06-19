@@ -10,7 +10,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: clusters/west-wa-sea-2301/heartbeat
-    repoURL: 'https://github.com/cse-labs/res-edge-labs'
+    repoURL: 'https://github.com/kubernetes101/argo-load'
     targetRevision: bartr
   project: default
   syncPolicy:
