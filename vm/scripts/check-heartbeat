@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 if [ "$PIB_SSL" = "" ]; then
-    res=$(curl -s http://localhost/heartbeat/17)
+    res=$(curl -s http://localhost:3088/heartbeat/17)
 else
     res=$(curl -s https://"$PIB_FQDN/heartbeat/17")
 fi
