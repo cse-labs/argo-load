@@ -32,6 +32,13 @@ sudo chsh --shell /bin/zsh vscode
     echo "export MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD"
     echo ""
 
+    echo "export PIB_MI=/subscriptions/8bec903d-0c37-4366-8604-70055f04b4cf/resourcegroups/TLD/providers/Microsoft.ManagedIdentity/userAssignedIdentities/pib-mi"
+    echo "export PIB_SSL=k8s-edge.com"
+    echo "export PIB_DNS_RG=tld"
+    echo "export PIB_GHCR=ghcr.io/cse-labs"
+    echo "export PIB_KEYVAULT=kv-pib"
+    echo ""
+
     echo "if [ -z \$DS_URL ]; then"
     echo "    export DS_URL=http://localhost:32080"
     echo "fi"
