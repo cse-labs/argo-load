@@ -1,4 +1,4 @@
-# PiB inner-loop
+# Inner-loop
 
 ## Codespace Contents
 
@@ -10,12 +10,6 @@
   - A custom CLI (kic) to lower the barrier of entry for new K8s developers
 
 ![images](./images/inner-loop..drawio.png)
-
-## Verify Your Working Branch
-
-- Your prompt should end like this
-  - /workspaces/Pilot-in-a-Box (mybranch) $
-- If your prompt ends in `(main)` create a working branch per the instructions in the [readme](/README.md#create-a-working-branch)
 
 ## Verify k3d cluster
 
@@ -77,7 +71,7 @@ kic svc
 
 > For the workshop, use `MyApp` for the application name
 
-- PiB includes templates for new applications that encapsulate K8s best practices
+- KiC includes templates for new applications that encapsulate K8s best practices
   - You can use any app name that conforms to a dotnet namespace
     - PascalCase
     - alpha only
@@ -88,8 +82,9 @@ kic svc
 ```bash
 
 # create a new app from the dotnet web api template
+# use the dotnet7 branch
 cd apps
-kic new dotnet-webapi MyApp
+kic new dotnet-webapi MyApp --branch dotnet7
 
 # this is important as the CLI is "context aware"
 cd myapp
@@ -99,7 +94,7 @@ cd myapp
 ## Build MyApp
 
 - Now that we've created a new application, the next logical step is to `build` the app
-- PiB encapsulates many best practices, so, as an App Dev, you don't have to figure out how to build a secure, multi-stage Dockerfile
+- KiC encapsulates many best practices, so, as an App Dev, you don't have to figure out how to build a secure, multi-stage Dockerfile
 
 ```bash
 
@@ -190,9 +185,6 @@ kic check grafana
 
 kic test load --duration 5 --verbose
 
-# you can also run load.json one time
-kic test integration -f load.json
-
 ```
 
 ## `kic test` WebV Configuration
@@ -212,13 +204,13 @@ kic test integration --max-errors 5 --show
 
 ```bash
 
-code $PIB_BASE/apps/myapp/webv/integration.json
+code $KIC_BASE/apps/myapp/webv/integration.json
 
 ```
 
 ## Generate Requests for Observability
 
-- PiB includes a full observability stack "in" the Codespace
+- KiC includes a full observability stack "in" the Codespace
   - Fluent Bit, Prometheus, Grafana
 - Generate some traffic for the dashboards
 
@@ -255,7 +247,7 @@ for i in {1..10}; kic test integration;
 ## Observability: Grafana
 
 - Grafana is a de-facto standard for K8s dashboards
-- PiB deploys a Grafana instance with custom dashboards "in" your Codespace
+- KiC deploys a Grafana instance with custom dashboards "in" your Codespace
 - This is a powerful inner-loop feature as you don't have external dependencies
 - Explore the [Grafana documentation](https://grafana.com/docs/) to learn about more data sources, visualizations, and capabilities
 
@@ -269,7 +261,7 @@ for i in {1..10}; kic test integration;
 ## Observability: Prometheus
 
 - Prometheus is a de-facto standard for K8s metrics
-- PiB deploys a Prometheus instance with `custom metrics` "in" your Codespace
+- KiC deploys a Prometheus instance with `custom metrics` "in" your Codespace
 - This is a powerful inner-loop feature as you don't have external dependencies
 - See the [Prometheus documentation](https://prometheus.io/docs/introduction/overview/) for more information
 
@@ -284,9 +276,9 @@ for i in {1..10}; kic test integration;
 ## Observability: Fluent Bit
 
 - Fluent Bit is a de-facto standard for K8s log forwarding
-  - PiB deploys a Fluent Bit instance with "in" your Codespace
+  - KiC deploys a Fluent Bit instance with "in" your Codespace
 - K9s is a commonly used UI that reduces the complexity of `kubectl`
-  - PiB deploys k9s "in" your Codespace
+  - KiC deploys k9s "in" your Codespace
 - This is a powerful inner-loop feature as you don't have external dependencies
 - See the [Fluent Bit documentation](https://docs.fluentbit.io/manual/) for more information
 

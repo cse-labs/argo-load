@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# if you change this, you will have to update the sql and api containers as well
+export MSSQL_SA_PASSWORD=Res-Edge23
+
 # this runs as part of pre-build
 
 echo "on-create start"
@@ -8,14 +11,12 @@ echo "$(date +'%Y-%m-%d %H:%M:%S')    on-create start" >> "$HOME/status"
 # Change shell to zsh for vscode
 sudo chsh --shell /bin/zsh vscode
 
-export PATH="$PATH:$HOME/bin"
-export GOPATH="$HOME/go"
-
-# restore the file to avoid errors
-dotnet restore labs/advanced-labs/cli/myapp/src
-
-mkdir -p "$HOME/.ssh"
-mkdir -p "$HOME/.oh-my-zsh/completions"
+{
+    echo ""
+    echo "source \$HOME/kic.env"
+    echo ""
+    echo "compinit"
+} >> "$HOME/.zshrc"
 
 {
     echo ""
@@ -25,65 +26,70 @@ mkdir -p "$HOME/.oh-my-zsh/completions"
     echo ""
 
     # add cli to path
-    echo "export PATH=\$PATH:$HOME/bin"
-    echo "export GOPATH=\$HOME/go"
-    echo "export PIB_BASE=$PWD"
+    echo "export KIC_BASE=$PWD"
+    echo "export KIC_REPO_FULL=\$(git remote get-url --push origin)"
+    echo "export KIC_BRANCH=\$(git branch --show-current)"
+    echo "export MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD"
     echo ""
 
-    echo "if [ \"\$PIB_PAT\" != \"\" ]"
-    echo "then"
-    echo "    export GITHUB_TOKEN=\$PIB_PAT"
+    echo "if [ -z \$DS_URL ]; then"
+    echo "    export DS_URL=http://localhost:32080"
     echo "fi"
     echo ""
 
-    echo "if [ \"\$PAT\" != \"\" ]"
-    echo "then"
+    echo "if [ \"\$KIC_PAT\" != \"\" ]; then"
+    echo "    export GITHUB_TOKEN=\$KIC_PAT"
+    echo "fi"
+    echo ""
+
+    echo "if [ \"\$PAT\" != \"\" ]; then"
     echo "    export GITHUB_TOKEN=\$PAT"
     echo "fi"
     echo ""
 
-    echo "export PIB_PAT=\$GITHUB_TOKEN"
+    echo "export KIC_PAT=\$GITHUB_TOKEN"
     echo "export PAT=\$GITHUB_TOKEN"
     echo ""
 
     echo "export MY_BRANCH=\$(echo \$GITHUB_USER | tr '[:upper:]' '[:lower:]')"
-    echo ""
 
-    echo "compinit"
-} >> "$HOME/.zshrc"
+    # use local CLI
+    # todo - comment / uncomment as needed
+    echo "export PATH=$PWD/cli:\$PATH"
+} > "$HOME/kic.env"
 
+# create sql helper command
 {
-    echo "defaultIPs: $PWD/ips"
-    echo "reservedClusterPrefixes:"
-    echo "  - corp-monitoring"
-    echo "  - central-mo-kc"
-    echo "  - central-tx-austin"
-    echo "  - east-ga-atlanta"
-    echo "  - east-nc-raleigh"
-    echo "  - west-ca-sd"
-    echo "  - west-wa-redmond"
-    echo "  - west-wa-seattle"
-} > "$HOME/.flt"
+    echo '#!/bin/zsh'
+    echo ""
+    echo '/opt/mssql-tools/bin/sqlcmd -d ist -S localhost,31433 -U sa -P $MSSQL_SA_PASSWORD "$@"'
+} > "$HOME/bin/sql"
+chmod +x "$HOME/bin/sql"
 
-echo "aka.ms/pib-cs-postinstall"
-curl -i https://aka.ms/pib-cs-postinstall
+# configure git
+git config --global core.whitespace blank-at-eol,blank-at-eof,space-before-tab
+git config --global pull.rebase false
+git config --global init.defaultbranch main
+git config --global fetch.prune true
+git config --global core.pager more
+git config --global diff.colorMoved zebra
+git config --global devcontainers-theme.show-dirty 1
+git config --global core.editor "nano -w"
 
-echo "dowloading kic and flt CLI"
+echo "dowloading kic and ds CLIs"
 .devcontainer/cli-update.sh
 
-# can remove once incorporated in base image
-echo "Updating k3d to 5.4.6"
-wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v5.4.6 bash
+echo "installing ArgoCD CLI"
+curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+rm argocd-linux-amd64
 
 echo "generating completions"
-kic completion zsh > "$HOME/.oh-my-zsh/completions/_kic"
-flt completion zsh > "$HOME/.oh-my-zsh/completions/_flt"
 gh completion -s zsh > ~/.oh-my-zsh/completions/_gh
 kubectl completion zsh > "$HOME/.oh-my-zsh/completions/_kubectl"
 k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
-
-echo "installing dotnet 6"
-sudo apt-get install -y dotnet-sdk-6.0
+kustomize completion zsh > "$HOME/.oh-my-zsh/completions/_kustomize"
+argocd completion zsh > "$HOME/.oh-my-zsh/completions/_argocd"
 
 echo "create local registry"
 docker network create k3d
@@ -94,15 +100,17 @@ echo "kic cluster create"
 kic cluster create
 
 echo "Pulling docker images"
-docker pull mcr.microsoft.com/dotnet/sdk:6.0
-docker pull mcr.microsoft.com/dotnet/aspnet:6.0-alpine
-docker pull ghcr.io/cse-labs/pib-webv:latest
+docker pull mcr.microsoft.com/dotnet/sdk:7.0
+docker pull mcr.microsoft.com/dotnet/aspnet:7.0-alpine
+docker pull ghcr.io/cse-labs/res-edge-webv:0.9
+docker pull ghcr.io/cse-labs/res-edge-automation:0.9
+
+sudo apt-get update
 
 # only run apt upgrade on pre-build
 if [ "$CODESPACE_NAME" = "null" ]
 then
     echo "$(date +'%Y-%m-%d %H:%M:%S')    upgrading" >> "$HOME/status"
-    sudo apt-get update
     sudo apt-get upgrade -y
 fi
 
