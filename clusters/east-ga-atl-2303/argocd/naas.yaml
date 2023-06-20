@@ -9,7 +9,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: clusters/east-ga-atl-2303/argocd/apps
-    repoURL: 'https://github.com/kubernetes101/argo-load'
+    repoURL: 'https://github.com/cse-labs/argo-load'
     targetRevision: bartr
   project: default
   syncPolicy:
@@ -30,7 +30,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: clusters/east-ga-atl-2303/namespaces
-    repoURL: 'https://github.com/kubernetes101/argo-load'
+    repoURL: 'https://github.com/cse-labs/argo-load'
     targetRevision: bartr
   project: default
   syncPolicy:
