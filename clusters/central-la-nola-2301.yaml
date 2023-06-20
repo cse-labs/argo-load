@@ -4,7 +4,7 @@ region: central
 zone: central-la
 district: central-la-nola
 store: central-la-nola-2301
-domain: central-la-nola-2301.k8s-edge.com
-ingressType: Https
+domain: 20.125.126.5
+ingressType: Http
 gitopsRepo: kubernetes101/argo-load
 gitopsBranch: bartr
