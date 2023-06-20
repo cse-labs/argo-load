@@ -4,7 +4,7 @@ region: central
 zone: central-tx
 district: central-tx-atx
 store: central-tx-atx-2301
-domain: 20.25.189.142
-ingressType: Http
+domain: central-tx-atx-2301.k8s-edge.com
+ingressType: Https
 gitopsRepo: kubernetes101/argo-load
 gitopsBranch: bartr
