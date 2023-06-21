@@ -32,7 +32,22 @@ ports:
   port: 80:80
 - nodeFilters:
   - server:0
+  port: 30080:30080
+- nodeFilters:
+  - server:0
   port: 30088:30088
+- nodeFilters:
+  - server:0
+  port: 31080:31080
+- nodeFilters:
+  - server:0
+  port: 31088:31088
+- nodeFilters:
+  - server:0
+  port: 32080:32080
+- nodeFilters:
+  - server:0
+  port: 32088:32088
 - nodeFilters:
   - server:0
   port: 32089:32089
