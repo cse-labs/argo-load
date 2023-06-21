@@ -2,4 +2,4 @@
 
 # "ds namespaces list" queries the Res-Edge data service and displays a list of Namespaces
 
-KIC_RES_EDGE_ENTITYNAME="namespaces" "$CLI_CMD_DIR/res-edge/entity-list" "$@"
+KIC_RES_EDGE_ENTITYNAME="namespaces" "$CLI_CMD_DIR/search/entity-list" --search "$@"
